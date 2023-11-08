@@ -8,7 +8,7 @@ class Connexion {
     private static $pdo;
 
     private function __construct(){
-        return;
+
     }
 
     public static function get(){
@@ -24,5 +24,17 @@ class Connexion {
                 echo 'Erreur de connexion :'.$e->getMessage();
             }
         }
+        return self::$pdo;
+    }
+
+/*     public static function query($query){
+
+        return self::get()->query($query)->fetchAll();
+    }
+ */
+    public static function query($query,$class,$params=[]){
+        $stmt=self::get()->prepare($query);
+        $stmt->execute($params);
+        return $stmt->fetchAll(\PDO::FETCH_CLASS,$class);
     }
 }
